@@ -8,19 +8,43 @@ M.config = {
   },
 
   -- see :h highlight-args
-  colors = {
-    {
-      guifg = "#353b45",
-      guibg = "#cbcb41",
-      gui = "bold,underline",
-    },
-    {
-      guifg = "#353b45",
-      guibg = "#89e051",
-      gui = "bold,underline",
-    },
-  },
+  -- color_groups = {
+  --   {
+  --     guibg = "#1e222a",
+  --     guifg = "e06c75",
+  --     gui = "bold",
+  --   },
+  -- },
 }
+
+local function gen_default_color_groups()
+  local default_colors = {
+    guifg = {
+      black = "#1e222a",
+    },
+    guibg = {
+      light_grey = "#6f737b",
+      red = "#e06c75",
+      pink = "#ff75a0",
+      green = "#98c379",
+      vibrant_green = "#7eca9c",
+      nord_blue = "#81A1C1",
+      blue = "#61afef",
+      purple = "#de98fd",
+      teal = "#519ABA",
+      orange = "#fca2aa",
+    },
+  }
+  local color_groups = {}
+  for _, guibg_color in pairs(default_colors.guibg) do
+    table.insert(color_groups, {
+      guibg = guibg_color,
+      guifg = default_colors.guifg.black,
+      gui = "bold",
+    })
+  end
+  return color_groups
+end
 
 local highlight_words = {}
 local color_selector = {}
@@ -97,7 +121,8 @@ M.setup = function ()
   end, {desc="source_highlight hl_toggle"})
   vim.keymap.set('n', M.config.map.hl_clear, M.hl_clear, {desc="source_highlight hl_clear"})
 
-  color_selector = require("source_highlight.colors_selector"):new(nil, M.config.colors)
+  M.config.color_groups = gen_default_color_groups()
+  color_selector = require("source_highlight.colors_selector"):new(nil, M.config.color_groups)
   highlight_words = require("source_highlight.highlight_words"):new(nil, color_selector)
 end
 

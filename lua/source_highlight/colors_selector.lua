@@ -30,7 +30,7 @@ function ColorSelector:new (o, colors_config)
   self.debug_name = "ColorSelector"
   local countor = 1
   for _, color_opt in pairs(colors_config) do
-    local group_name = "ExpandStar_" .. countor
+    local group_name = "SourceHighlight_" .. countor
     hl_set(group_name, color_opt)
     self:add_tail({
       opt = color_opt,

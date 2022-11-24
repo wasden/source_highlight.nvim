@@ -98,19 +98,35 @@ function List:is_empty()
   return self.next == nil
 end
 
+function List:__print_node(node)
+  if not node then
+    print("node : nil")
+    return
+  end
+  print("{")
+  for key, value in pairs(node) do
+    print(string.format("  %s : %s", key, value))
+  end
+  print("}")
+end
+
 function List:debug()
   print("List:", self.debug_name)
   local last_node = nil
   self:foreach(function (node)
-    vim.pretty_print(node)
+    self:__print_node(node)
     last_node = node
   end)
   if last_node == self.last then
     print("last check true")
+  elseif not last_node and self.last == self then
+    print("last check true")
   else
-    print("last check false")
-    vim.pretty_print("last_node", last_node)
-    vim.pretty_print("last_ptr", self.last)
+    error("last check false")
+    print("last_node:")
+    self:__print_node(last_node)
+    print("last_ptr:")
+    self:__print_node(self.last)
   end
 end
 
