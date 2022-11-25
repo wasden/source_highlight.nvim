@@ -1,20 +1,11 @@
 local M = {}
 
 M.config = {
-  map = {
+  mappings = {
     hl_toggle_whole = "<F8>",
     hl_clear = "<F9>",
     hl_toggle = "<S-F8>",
   },
-
-  -- see :h highlight-args
-  -- color_groups = {
-  --   {
-  --     guibg = "#1e222a",
-  --     guifg = "e06c75",
-  --     gui = "bold",
-  --   },
-  -- },
 }
 
 local function gen_default_color_groups()
@@ -44,6 +35,40 @@ local function gen_default_color_groups()
     })
   end
   return color_groups
+end
+
+local function set_mappings(mappings)
+  if mappings.hl_toggle_whole then
+    vim.keymap.set('n', mappings.hl_toggle_whole, function()
+      M.hl_toggle({
+        is_visual = false,
+        is_whole = true,
+      })
+    end, { desc = "source_highlight hl_toggle_whole" })
+    vim.keymap.set('v', mappings.hl_toggle_whole, function()
+      M.hl_toggle({
+        is_visual = true,
+        is_whole = true,
+      })
+    end, { desc = "source_highlight hl_toggle_whole" })
+  end
+  if mappings.hl_toggle then
+    vim.keymap.set('n', mappings.hl_toggle, function()
+      M.hl_toggle({
+        is_visual = false,
+        is_whole = false,
+      })
+    end, { desc = "source_highlight hl_toggle" })
+    vim.keymap.set('v', mappings.hl_toggle, function()
+      M.hl_toggle({
+        is_visual = true,
+        is_whole = false,
+      })
+    end, { desc = "source_highlight hl_toggle" })
+  end
+  if mappings.hl_clear then
+    vim.keymap.set('n', mappings.hl_clear, M.hl_clear, { desc = "source_highlight hl_clear" })
+  end
 end
 
 local highlight_words = {}
@@ -102,34 +127,16 @@ M.debug = function()
   vim.pretty_print("vim matches", vim.fn.getmatches())
 end
 
-M.setup = function()
-  vim.keymap.set('n', M.config.map.hl_toggle_whole, function()
-    M.hl_toggle({
-      is_visual = false,
-      is_whole = true,
-    })
-  end, { desc = "source_highlight hl_toggle_whole" })
-  vim.keymap.set('v', M.config.map.hl_toggle_whole, function()
-    M.hl_toggle({
-      is_visual = true,
-      is_whole = true,
-    })
-  end, { desc = "source_highlight hl_toggle_whole" })
-  vim.keymap.set('n', M.config.map.hl_toggle, function()
-    M.hl_toggle({
-      is_visual = false,
-      is_whole = false,
-    })
-  end, { desc = "source_highlight hl_toggle" })
-  vim.keymap.set('v', M.config.map.hl_toggle, function()
-    M.hl_toggle({
-      is_visual = true,
-      is_whole = false,
-    })
-  end, { desc = "source_highlight hl_toggle" })
-  vim.keymap.set('n', M.config.map.hl_clear, M.hl_clear, { desc = "source_highlight hl_clear" })
+M.setup = function(config)
+  if config then
+    print("a")
+    M.config = vim.tbl_deep_extend("force", M.config, config)
+  end
+  set_mappings(M.config.mappings)
 
-  M.config.color_groups = gen_default_color_groups()
+  if M.config.color_groups == nil then
+    M.config.color_groups = gen_default_color_groups()
+  end
   color_selector = require("source_highlight.colors_selector"):new(nil, M.config.color_groups)
   highlight_words = require("source_highlight.select_win_layer"):new(color_selector)
   vim.api.nvim_create_autocmd({ "WinClosed" }, { callback = function()
