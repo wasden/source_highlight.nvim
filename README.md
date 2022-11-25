@@ -9,9 +9,9 @@ Simple highlight based on `matchadd`(managed by window), similar to sourceinsigh
 
 |function                               | defaut key |
 | ------------------------------------- | ---------- |
-| highlight current word                | <F8>       |
-| highlight current word without \< \>  | <S-F8>     |
-| clear highlightings of current window | <F9>       |
+| highlight current word                |  F8        |
+| highlight current word without \< \>  |  S-F8      |
+| clear highlightings of current window |  F9        |
 ## Installation
 ```lua
 -- packer 
