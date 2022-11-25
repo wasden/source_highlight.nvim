@@ -71,8 +71,8 @@ end
 -- @opt is_visual is_whole
 M.hl_toggle = function (opt)
   local text = text_get(opt.is_visual)
-  if not text then
-    print("not support operation")
+  if not text or text == "" then
+    return
   end
 
   local word = highlight_words:find(text)
@@ -123,7 +123,11 @@ M.setup = function ()
 
   M.config.color_groups = gen_default_color_groups()
   color_selector = require("source_highlight.colors_selector"):new(nil, M.config.color_groups)
-  highlight_words = require("source_highlight.highlight_words"):new(nil, color_selector)
+  color_selector = require("source_highlight.colors_selector"):new(nil, M.config.color_groups)
+  highlight_words = require("source_highlight.select_win_layer"):new(color_selector)
+  vim.api.nvim_create_autocmd({"WinClosed"}, {callback = function ()
+    highlight_words:win_closed_handle()
+  end})
 end
 
 return M

@@ -24,6 +24,10 @@ local function hl_unset(group)
 end
 
 function ColorSelector:new (o, colors_config)
+  if self.instance ~= nil then
+    error(debug.traceback("new ColorSelector twice"))
+    return self.instance
+	end
   o = o or List:new()
   setmetatable(o, self)
   self.__index = self
@@ -33,7 +37,6 @@ function ColorSelector:new (o, colors_config)
     local group_name = "SourceHighlight_" .. countor
     hl_set(group_name, color_opt)
     self:add_tail({
-      opt = color_opt,
       name = group_name,
     })
     countor = countor + 1
@@ -42,6 +45,7 @@ function ColorSelector:new (o, colors_config)
     error("colors is empty")
     return nil
   end
+  self.instance = ColorSelector
   return ColorSelector
 end
 
