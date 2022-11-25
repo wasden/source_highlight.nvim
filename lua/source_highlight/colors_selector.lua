@@ -24,10 +24,6 @@ local function hl_unset(group)
 end
 
 function ColorSelector:new (o, colors_config)
-  if self.instance ~= nil then
-    error(debug.traceback("new ColorSelector twice"))
-    return self.instance
-	end
   o = o or List:new()
   setmetatable(o, self)
   self.__index = self
@@ -45,7 +41,6 @@ function ColorSelector:new (o, colors_config)
     error("colors is empty")
     return nil
   end
-  self.instance = ColorSelector
   return ColorSelector
 end
 

@@ -16,6 +16,7 @@ M.config = {
   --   },
   -- },
 }
+local setup_once = false
 
 local function gen_default_color_groups()
   local default_colors = {
@@ -88,6 +89,7 @@ M.hl_clear = function ()
 end
 
 M.debug = function ()
+  print(string.format("setup_once:%s", setup_once))
   highlight_words:debug()
   color_selector:debug()
   vim.pretty_print("config", M.config)
@@ -95,6 +97,11 @@ M.debug = function ()
 end
 
 M.setup = function ()
+  -- in case of PackerCompile call setup() again
+  if setup_once then
+    return
+  end
+  setup_once = true
   vim.keymap.set('n', M.config.map.hl_toggle_whole, function ()
     M.hl_toggle({
       is_visual = false,
@@ -122,7 +129,6 @@ M.setup = function ()
   vim.keymap.set('n', M.config.map.hl_clear, M.hl_clear, {desc="source_highlight hl_clear"})
 
   M.config.color_groups = gen_default_color_groups()
-  color_selector = require("source_highlight.colors_selector"):new(nil, M.config.color_groups)
   color_selector = require("source_highlight.colors_selector"):new(nil, M.config.color_groups)
   highlight_words = require("source_highlight.select_win_layer"):new(color_selector)
   vim.api.nvim_create_autocmd({"WinClosed"}, {callback = function ()
