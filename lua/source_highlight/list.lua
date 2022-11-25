@@ -4,21 +4,21 @@ function List:new(o)
   o = o or {}
   setmetatable(o, self)
   self.__index = self
-  self.next = nil
-  self.last = nil
   self.debug_name = "List"
+  o.last = o
   return o
 end
 
--- empty list add savely
 function List:add_tail(node)
-  if self:is_empty() then
-    self.last = node
-    self.next = node
-  else
-    self.last.next = node
-    self.last = node
-  end
+  -- if self:is_empty() then
+  --   self.last = node
+  --   self.next = node
+  -- else
+  --   self.last.next = node
+  --   self.last = node
+  -- end
+  self.last.next = node
+  self.last = node
   node.next = nil
 end
 
@@ -56,7 +56,7 @@ end
 function List:fetch_by(func)
   local last_node = nil
   local fetch_node = nil
-  self:foreach_break(function (node)
+  self:foreach_break(function(node)
     if func(node) then
       fetch_node = node
       if not last_node then
@@ -113,7 +113,7 @@ end
 function List:debug()
   print("List:", self.debug_name)
   local last_node = nil
-  self:foreach(function (node)
+  self:foreach(function(node)
     self:__print_node(node)
     last_node = node
   end)

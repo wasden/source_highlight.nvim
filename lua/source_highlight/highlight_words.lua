@@ -12,7 +12,7 @@ local function pattern_get(text, opt)
   end
 end
 
-function HighlightWords:new (o, color_selector)
+function HighlightWords:new(o, color_selector)
   o = o or List:new()
   setmetatable(o, self)
   self.__index = self
@@ -21,20 +21,20 @@ function HighlightWords:new (o, color_selector)
   return o
 end
 
-function HighlightWords:add (text, opt)
+function HighlightWords:add(text, opt)
   local pattern = pattern_get(text, opt)
   local color_group = self.color_selector:alloc()
   local id = vim.fn.matchadd(color_group, pattern)
   self:add_tail({
-    text=text,
-    id=id,
-    color_group=color_group,
-    pattern=pattern,
+    text = text,
+    id = id,
+    color_group = color_group,
+    pattern = pattern,
   })
 end
 
 function HighlightWords:fetch_by_text(text)
-  return self:fetch_by(function (node)
+  return self:fetch_by(function(node)
     if node.text == text then
       return true
     else
@@ -50,14 +50,14 @@ function HighlightWords:remove(word)
 end
 
 function HighlightWords:clear()
-  self:foreach(function (node)
+  self:foreach(function(node)
     self:remove(node)
   end)
 end
 
 function HighlightWords:find(text)
   local find_word = nil
-  self:foreach_break(function (node)
+  self:foreach_break(function(node)
     if node.text == text then
       find_word = node
       return true

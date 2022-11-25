@@ -13,7 +13,7 @@ local function win_linked_func(self, func_key)
   end
   local hl_word_list = self.win_words[winid]
   local exec_func = hl_word_list[func_key]
-  return function (_, ...)
+  return function(_, ...)
     return exec_func(hl_word_list, ...)
   end
 end
@@ -34,7 +34,6 @@ function SelectWinLayer:new(color_selector)
   self.__index = win_linked_func
   return o
 end
-
 
 function SelectWinLayer:win_closed_handle()
   self.win_words[vim.api.nvim_get_current_win()] = nil

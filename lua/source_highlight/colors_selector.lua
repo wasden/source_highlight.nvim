@@ -23,7 +23,7 @@ local function hl_unset(group)
   )
 end
 
-function ColorSelector:new (o, colors_config)
+function ColorSelector:new(o, colors_config)
   o = o or List:new()
   setmetatable(o, self)
   self.__index = self
@@ -32,26 +32,26 @@ function ColorSelector:new (o, colors_config)
   for _, color_opt in pairs(colors_config) do
     local group_name = "SourceHighlight_" .. countor
     hl_set(group_name, color_opt)
-    self:add_tail({
+    o:add_tail({
       name = group_name,
     })
     countor = countor + 1
   end
-  if self:is_empty() then
+  if o:is_empty() then
     error("colors is empty")
     return nil
   end
-  return ColorSelector
+  return o
 end
 
-function ColorSelector:alloc ()
+function ColorSelector:alloc()
   local color = self:pop()
   self:add_tail(color)
   return color.name
 end
 
 function ColorSelector:fetch_by_name(color_name)
-  local color = self:fetch_by(function (node)
+  local color = self:fetch_by(function(node)
     if node.name == color_name then
       return true
     else
@@ -71,4 +71,5 @@ function ColorSelector:off()
     hl_unset(color.name)
   end)
 end
+
 return ColorSelector
