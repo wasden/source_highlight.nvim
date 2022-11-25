@@ -1,5 +1,5 @@
 # source_highlight.nvim
-[![peek-highlight](https://asciinema.org/a/540272.svg)](https://asciinema.org/a/540272)
+![Peek-source-highlight](https://user-images.githubusercontent.com/26076025/204005490-5a15af84-a5a5-4a1b-8c19-97098a11ea7c.gif)
 ## Description
 Simple highlight based on `matchadd`(managed by window), similar to sourceinsight's highlighting.
 ## Feature
