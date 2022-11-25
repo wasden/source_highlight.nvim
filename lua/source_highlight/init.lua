@@ -54,7 +54,15 @@ local color_selector = {}
 local function visual_text_get()
   local _, ls, cs = unpack(vim.fn.getpos('v'))
   local _, le, ce = unpack(vim.fn.getpos('.'))
-  local visulal_lines = vim.api.nvim_buf_get_text(0, ls-1, cs-1, le-1, ce, {})
+
+  -- not support cross line select
+  if ls ~= le then
+    return nil
+  end
+  if cs > ce then
+    cs, ce = ce, cs
+  end
+  local visulal_lines = vim.api.nvim_buf_get_text(0, ls - 1, cs - 1, le - 1, ce, {})
   vim.api.nvim_input("<esc>")
   for _, text in pairs(visulal_lines) do
     return text
