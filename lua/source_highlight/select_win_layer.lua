@@ -35,8 +35,8 @@ function SelectWinLayer:new(color_selector)
   return o
 end
 
-function SelectWinLayer:win_closed_handle()
-  self.win_words[vim.api.nvim_get_current_win()] = nil
+function SelectWinLayer:win_closed_handle(winid)
+  self.win_words[tonumber(winid)] = nil
 end
 
 function SelectWinLayer:debug()

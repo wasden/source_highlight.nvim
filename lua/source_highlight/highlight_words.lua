@@ -44,7 +44,10 @@ function HighlightWords:fetch_by_text(text)
 end
 
 function HighlightWords:remove(word)
-  vim.fn.matchdelete(word.id)
+  if vim.fn.matchdelete(word.id) == -1 then
+    error("matchdelete fail")
+    return
+  end
   self.color_selector:free(word.color_group)
   self:fetch_by_text(word.text)
 end

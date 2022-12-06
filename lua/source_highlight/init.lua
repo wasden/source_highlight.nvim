@@ -139,8 +139,8 @@ M.setup = function(config)
   end
   color_selector = require("source_highlight.colors_selector"):new(nil, M.config.color_groups)
   highlight_words = require("source_highlight.select_win_layer"):new(color_selector)
-  vim.api.nvim_create_autocmd({ "WinClosed" }, { callback = function()
-    highlight_words:win_closed_handle()
+  vim.api.nvim_create_autocmd({ "WinClosed" }, { callback = function(opt)
+    highlight_words:win_closed_handle(opt.match)
   end })
 end
 
